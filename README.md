@@ -7,23 +7,30 @@
 
 This repository contains the computational framework used in the manuscript describing **MagProCom**, a magnetically programmable living neural network platform for programmable biological computation.
 
-The framework evaluates neural computation capabilities of living neural networks through multiple computational tasks, including:
+The framework evaluates computational capabilities of living neural networks through multiple tasks, including:
 
 - Continuous maze navigation
 - Go life-and-death (Tsumego) decision-making
-- Reservoir-based neural state analysis and decoding
+- Full-board Go gameplay
 
 The computational pipeline integrates:
 
 - Neural activity preprocessing
 - Biological reservoir computing
+- Leaky Echo State Network (LeakyESN)
 - Neural state-space analysis
-- State clustering and assembly analysis
 - Neural decoding
-- Task performance evaluation
-- Visualization of neural dynamics
+- State clustering and assembly analysis
+- Decision prediction
+- Gameplay evaluation
 
-For improved reproducibility and maintainability, the original monolithic script has been reorganized into a modular framework.
+For improved reproducibility and maintainability, the original monolithic scripts have been reorganized into two independent and modular frameworks:
+
+1. **MagProCom_maze_Go**  
+   Framework for continuous navigation and discrete Go decision-making tasks.
+
+2. **Go_biogame**  
+   Framework for complete Go gameplay using neural reservoir-based decision generation.
 
 ---
 
@@ -35,29 +42,60 @@ MagProCom/
 ├── MagProCom_maze_Go/
 │   │
 │   ├── common.py
-│   │   └── Common configurations, imports, plotting parameters, and shared utilities
+│   │   └── Common imports, global parameters, visualization settings,
+│   │       color configurations, and shared utilities
 │   │
 │   ├── goenvironment.py
-│   │   └── GoEnvironment: Go board environment for life-and-death tasks
+│   │   └── GoEnvironment:
+│   │       Go board environment for life-and-death decision tasks
 │   │
 │   ├── gogamedatabaseenvironment.py
-│   │   └── GoGameDatabaseEnvironment: Database-based Go game environment
+│   │   └── GoGameDatabaseEnvironment:
+│   │       Database-based Go problem environment
 │   │
 │   ├── mazeenvironment.py
-│   │   └── MazeEnvironment: Continuous maze navigation environment
+│   │   └── MazeEnvironment:
+│   │       Continuous maze navigation environment
 │   │
 │   ├── bioreservoirdecoder.py
-│   │   └── BioReservoirDecoder: Neural preprocessing, reservoir decoding,
-│   │       visualization, state analysis, and assembly analysis
+│   │   └── BioReservoirDecoder:
+│   │       Neural preprocessing, decoding, visualization,
+│   │       neural state analysis, and assembly analysis
 │   │
 │   ├── run_experiment.py
-│   │   └── Main execution script for experiments
+│   │   └── Main execution script for maze and Tsumego experiments
 │   │
 │   └── __init__.py
 │
+│
 ├── Go_biogame/
 │   │
-│   └── (Full Go gameplay framework)
+│   ├── common.py
+│   │   └── Common imports, global parameters, color mappings,
+│   │       font settings, and shared configurations
+│   │
+│   ├── reservoir.py
+│   │   └── Leaky Echo State Network (LeakyESN) implementation
+│   │
+│   ├── goboard.py
+│   │   └── Complete Go board implementation including:
+│   │       board initialization, move validation,
+│   │       state updating, and game rules
+│   │
+│   ├── mcts.py
+│   │   └── Monte Carlo Tree Search implementation:
+│   │       MCTSNode and AI opponent (WhiteAI)
+│   │
+│   ├── neural_system.py
+│   │   └── NeuralGoSystem:
+│   │       Complete neural reservoir-based Go gameplay framework
+│   │
+│   ├── main.py
+│   │   └── Main execution script for Go gameplay experiments
+│   │
+│   ├── __init__.py
+│   │
+│   └── README.md
 │
 ├── requirements.txt
 ├── README.md
@@ -69,94 +107,90 @@ MagProCom/
 
 # Module Description
 
-## 1. MagProCom_maze_Go
+# 1. MagProCom_maze_Go
 
-This module implements the core computational framework for evaluating neural computation in continuous control and discrete decision-making tasks.
-
-The module contains the following components:
+The `MagProCom_maze_Go` module implements the computational framework for evaluating neural computation during continuous control and discrete decision-making tasks.
 
 ---
 
-### `common.py`
+## `common.py`
 
-Provides shared components used throughout the framework, including:
+Provides shared components used throughout the framework:
 
-- Required Python imports
+- Python imports
 - Global parameters
-- Visualization settings
-- Color configurations
-- Common utility functions
+- Visualization configurations
+- Color settings
+- Utility functions
 
 ---
 
-### `mazeenvironment.py`
+## `mazeenvironment.py`
 
 Implements the continuous maze navigation environment.
 
-Main functions include:
+Functions include:
 
-- Maze generation and initialization
+- Maze generation
+- Environment initialization
 - Agent movement simulation
 - Position tracking
 - Navigation performance evaluation
 
-This environment is used to evaluate continuous neural control capabilities of the biological reservoir.
+This environment is used to evaluate continuous neural control capabilities.
 
 ---
 
-### `goenvironment.py`
+## `goenvironment.py`
 
-Implements the Go life-and-death (Tsumego) task environment.
+Implements the Go life-and-death (Tsumego) decision environment.
 
 Functions include:
 
 - Go board initialization
 - Legal move checking
 - Board state updating
-- Task-specific evaluation
-
-This environment supports neural-state-based decision decoding.
+- Decision task evaluation
 
 ---
 
-### `gogamedatabaseenvironment.py`
+## `gogamedatabaseenvironment.py`
 
-Provides a database-based Go environment for loading and evaluating predefined Go problems.
+Provides database-based Go task generation.
 
 Functions include:
 
-- Loading Go game records
+- Loading predefined Go problems
 - Reconstructing board states
-- Generating decision-making tasks
+- Generating decision tasks
 - Evaluating predicted moves
 
 ---
 
-### `bioreservoirdecoder.py`
+## `bioreservoirdecoder.py`
 
-Contains the main computational analysis framework.
+Contains the main biological reservoir analysis pipeline.
 
-The module implements:
+Implemented functions include:
 
 - Neural activity preprocessing
-- Reservoir state construction
-- Neural state transformation
-- Dimensionality reduction
-- State clustering
+- Reservoir state analysis
 - Neural manifold visualization
-- Decoder training and prediction
-- Assembly dynamics analysis
-- Performance evaluation
+- State clustering
+- Neural decoding
+- Prediction evaluation
+- Neural assembly analysis
+- Visualization of computational dynamics
 
-This file contains the primary analysis pipeline used for the reported computational results.
+This module contains the core analysis used for neural computation characterization.
 
 ---
 
-### `run_experiment.py`
+## `run_experiment.py`
 
-Main entry point for running experiments.
+Main entry point for maze navigation and Go life-and-death experiments.
 
-Example:
+Run:
 
 ```bash
 cd MagProCom_maze_Go
@@ -167,21 +201,83 @@ python run_experiment.py
 
 # 2. Go_biogame
 
-The `Go_biogame` module implements the complete Go gameplay framework based on biological neural reservoir computation.
+The `Go_biogame` module implements complete Go gameplay based on biological neural reservoir computation.
 
-The framework includes:
+---
 
-- Full-board Go gameplay
-- Neural activity decoding
-- Reservoir-based move generation
-- Board-state updating
-- Gameplay evaluation against AI opponents
+## `common.py`
 
-Usage:
+Contains:
+
+- Python imports
+- Global parameters
+- Visualization settings
+- Color mapping
+- Font configurations
+
+---
+
+## `reservoir.py`
+
+Implements the neural reservoir model:
+
+- Leaky Echo State Network (LeakyESN)
+- Reservoir state evolution
+- Temporal neural dynamics processing
+
+---
+
+## `goboard.py`
+
+Implements the complete Go board system:
+
+- Board initialization
+- Stone placement
+- Legal move checking
+- Capture rules
+- Board state updating
+- Game termination conditions
+
+---
+
+## `mcts.py`
+
+Implements Monte Carlo Tree Search-based AI.
+
+Includes:
+
+- MCTSNode
+- Tree search procedure
+- WhiteAI opponent
+
+This module provides benchmark AI opponents for evaluating neural Go gameplay performance.
+
+---
+
+## `neural_system.py`
+
+Implements the complete neural Go gameplay framework.
+
+Main functions include:
+
+- Neural activity processing
+- Reservoir computation
+- Move decoding
+- Board-state prediction
+- Neural decision generation
+- Gameplay evaluation
+
+---
+
+## `main.py`
+
+Main execution script for complete Go gameplay experiments.
+
+Run:
 
 ```bash
 cd Go_biogame
-python run.py
+python main.py
 ```
 
 ---
@@ -217,31 +313,18 @@ pip install -r requirements.txt
 
 ## Maze Navigation and Go Life-and-Death Tasks
 
-Run:
-
 ```bash
 cd MagProCom_maze_Go
 python run_experiment.py
 ```
 
-The program performs:
-
-1. Neural data loading and preprocessing
-2. Reservoir state analysis
-3. Neural decoding
-4. Task execution
-5. Visualization generation
-6. Performance evaluation
-
 ---
 
-## Complete Go Gameplay
-
-Run:
+## Full Go Gameplay
 
 ```bash
 cd Go_biogame
-python run.py
+python main.py
 ```
 
 ---
@@ -258,14 +341,15 @@ All computational analyses were performed using Python.
 
 This repository provides:
 
-- Modular task environments
-- Neural reservoir analysis pipeline
-- Decoding algorithms
+- Task environments
+- Neural reservoir implementations
+- Neural decoding pipelines
+- Go gameplay framework
+- AI benchmark opponent
 - Neural state visualization
-- Assembly and manifold analysis
-- Performance evaluation procedures
+- Computational performance evaluation
 
-The modular structure allows independent reproduction of each computational task.
+The modular organization enables independent reproduction of each computational task.
 
 ---
 
